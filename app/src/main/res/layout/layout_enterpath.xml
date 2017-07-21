@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/bConfirm"
+            android:layout_width="88dp"
+            android:layout_height="34dp"
+            android:layout_marginLeft="116dp"
+            android:layout_marginTop="0dp"
+            android:layout_weight="1"
+            android:text="Confirm"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etPath" />
+
+        <EditText
+            android:id="@+id/etPath"
+            android:layout_width="200dp"
+            android:layout_height="73dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="0dp"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="199dp"
+            android:layout_height="53dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="16dp"
+            android:text="Enter the path you want to save (the default path will be used if it is empty) . "
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/bCancel"
+            android:layout_width="84dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="0dp"
+            android:text="cancel"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etPath" />
+
+    </android.support.constraint.ConstraintLayout>
+</LinearLayout>
