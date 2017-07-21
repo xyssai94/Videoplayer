@@ -7,6 +7,7 @@ import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -37,6 +38,17 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     //storage path
     private String path;
+
+
+    /*
+        server args
+     */
+    String DEFAULT_FILE_PATH  = Environment.getExternalStorageDirectory() + "/Pictures/";
+    private static VideoServer mVideoServer;
+    private static final int VIDEO_WIDTH  = 800;
+    private static final int VIDEO_HEIGHT = 600;
+
+
 
     public CameraPreview(Context context, String path) {
         super(context);
@@ -105,14 +117,23 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                     "IMG_" + timeStamp + ".jpg");
             outputMediaFileType = "image/*";
         } else if (type == MEDIA_TYPE_VIDEO) {
+            //String filename="VID_" + timeStamp + ".mp4";
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
                     "VID_" + timeStamp + ".mp4");
             outputMediaFileType = "video/*";
+            //MainActivity.setServerPath(filename);
         } else {
             return null;
         }
+        String filename="VID_" + timeStamp + ".mp4";
+        setServerPath(filename);
         outputMediaFileUri = Uri.fromFile(mediaFile);
         return mediaFile;
+    }
+
+    public void setServerPath(String filename){
+        DEFAULT_FILE_PATH=DEFAULT_FILE_PATH+filename;
+        //DEFAULT_FILE_PATH=DEFAULT_FILE_PATH+"testvideo.mp4";
     }
 
     public void setPath(String path) {
@@ -156,8 +177,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     //recording
     public boolean startRecording() {
+        if(mVideoServer!=null)
+            mVideoServer.stop();
         if (prepareVideoRecorder()) {
             mMediaRecorder.start();
+
             return true;
         } else {
             releaseMediaRecorder();
@@ -171,6 +195,17 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(outputMediaFileUri.getPath(), MediaStore.Video.Thumbnails.MINI_KIND);
             view.setImageBitmap(thumbnail);
         }
+
+        mVideoServer = new VideoServer(DEFAULT_FILE_PATH, VIDEO_WIDTH, VIDEO_HEIGHT, VideoServer.DEFAULT_SERVER_PORT);
+        //   mTipsTextView.setText("Please input the address in PC Browers:\n\n"+getLocalIpStr(this)+":"+VideoServer.DEFAULT_SERVER_PORT);
+        try {
+            mVideoServer.start();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            //       mTipsTextView.setText(e.getMessage());
+        }
+        DEFAULT_FILE_PATH=Environment.getExternalStorageDirectory() + "/Pictures/";
         releaseMediaRecorder();
     }
 
@@ -188,8 +223,16 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+        mMediaRecorder.setVideoEncodingBitRate(1*1024*1024);
+        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
 
-        mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
+
+        //mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
+
+
+
 
         mMediaRecorder.setVideoSize(1920,1080);
 
@@ -197,7 +240,10 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         mMediaRecorder.setPreviewDisplay(mHolder.getSurface());
 
+
+
         try {
+            //mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
             mMediaRecorder.prepare();
         } catch (IllegalStateException e) {
             Log.d(TAG, "IllegalStateException preparing MediaRecorder: " + e.getMessage());

@@ -22,22 +22,22 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private static final String DEFAULT_FILE_PATH  = Environment.getExternalStorageDirectory() + "/Pictures/testvideo.mp4";
-    private static final int VIDEO_WIDTH  = 800;
-    private static final int VIDEO_HEIGHT = 600;
+    private static final int VIDEO_WIDTH  = 1920;
+    private static final int VIDEO_HEIGHT = 1080;
 
-    private VideoServer mVideoServer;
+    private static VideoServer mVideoServer;
 
     CameraPreview mPreview;
     FrameLayout preview;
     Button bPath,buttonCaptureVideo,buttonCapturePhoto;
     ImageView mediaPreview;
     private static final String TAG="CameraPreview";
-    File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-         Environment.DIRECTORY_PICTURES).toString());
+    File mediaStorageDir = new File("/storage/emulated/0/Pictures/");
 
     String path=mediaStorageDir.getPath();
 
+
+    static String DEFAULT_FILE_PATH  = Environment.getExternalStorageDirectory() + "/Pictures/";
 
 
     @Override
@@ -64,15 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         //   mTipsTextView = (TextView)findViewById(R.id. TipsTextView);
-        mVideoServer = new VideoServer(DEFAULT_FILE_PATH, VIDEO_WIDTH, VIDEO_HEIGHT, VideoServer.DEFAULT_SERVER_PORT);
-        //   mTipsTextView.setText("Please input the address in PC Browers:\n\n"+getLocalIpStr(this)+":"+VideoServer.DEFAULT_SERVER_PORT);
-        try {
-            mVideoServer.start();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            //       mTipsTextView.setText(e.getMessage());
-        }
+
 
         mediaPreview = (ImageView) findViewById(R.id.media_preview);
         preview=(FrameLayout) findViewById(R.id.camera_preview);
