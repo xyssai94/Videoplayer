@@ -15,10 +15,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int VIDEO_HEIGHT = 1080;
 
     private static VideoServer mVideoServer;
+    private TextView mTipsTextView;
 
     CameraPreview mPreview;
     FrameLayout preview;
@@ -63,13 +64,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //   mTipsTextView = (TextView)findViewById(R.id. TipsTextView);
+        mTipsTextView = (TextView)findViewById(R.id. textView2);
 
+        mTipsTextView.setText("IP address:\n\n"+getLocalIpStr(this)+":"+VideoServer.DEFAULT_SERVER_PORT);
 
         mediaPreview = (ImageView) findViewById(R.id.media_preview);
         preview=(FrameLayout) findViewById(R.id.camera_preview);
 
-        //mPreview=new CameraPreview(this,path);
+        mPreview=new CameraPreview(this,path);
         initCamera();
 
         bPath=(Button)findViewById(R.id.button_path);
