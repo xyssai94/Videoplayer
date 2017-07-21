@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int VIDEO_WIDTH  = 800;
     private static final int VIDEO_HEIGHT = 600;
 
+    private TextView mTipsTextView;
     private VideoServer mVideoServer;
 
     CameraPreview mPreview;
@@ -63,15 +65,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //   mTipsTextView = (TextView)findViewById(R.id. TipsTextView);
+        mTipsTextView = (TextView)findViewById(R.id. textView2);
         mVideoServer = new VideoServer(DEFAULT_FILE_PATH, VIDEO_WIDTH, VIDEO_HEIGHT, VideoServer.DEFAULT_SERVER_PORT);
-        //   mTipsTextView.setText("Please input the address in PC Browers:\n\n"+getLocalIpStr(this)+":"+VideoServer.DEFAULT_SERVER_PORT);
+        mTipsTextView.setText("IP address:\n\n"+getLocalIpStr(this)+":"+VideoServer.DEFAULT_SERVER_PORT);
         try {
             mVideoServer.start();
         }
         catch (IOException e) {
             e.printStackTrace();
-            //       mTipsTextView.setText(e.getMessage());
+            mTipsTextView.setText(e.getMessage());
         }
 
         mediaPreview = (ImageView) findViewById(R.id.media_preview);
